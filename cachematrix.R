@@ -1,24 +1,29 @@
-##Overall, this assignment highlights the power and intriucases of lexical scoping.
-##This R code takes advantage of lexical scoping and the fact that functions that return objects of type list(),
-##also allow access to any other objects defined in the environment of the original function.
-##In the specific instance of makeCacheMatrix() this means that subsequent code can access the values of x or m,
-##through the use of getters (program modules that retrieve data) and setters (program modules that sets data).
-##This is how cacheSolve() is able to calculate and store the inverse of the matrix for the input argument.
-##It must be of the type makeCacheMatrix().
-##List elements in makeCacheMatrix() are defined with names.
-##This allows one to access these functions with the $ form of the extract operator.
-
-##Matrix inversion is usually a costly computation and there may be some benefit to caching the inverse of a matrix,
-##rather than compute it repeatedly.
-##These functions cache the inverse of a matrix.
-##Computing the inverse of a square matrix can be done with the solve function in R.
-##For example, if X is a square invertible matrix, then solve(X) returns its inverse.
-##For this code, it is assumed that the matrix supplied is always invertible.
-
-##makeCacheMatrix:
-##This function creates a special "matrix" object that can cache its inverse.
-##This function builds a set of functions and returns the functions within a list to the parent environment.
-##Please note that the "<<" (double left arrow) indicates that the assignment should be made to the parent environment
+##  ******************************************************
+##	Author: Jaro Vomacka
+##	Assignment: Programming Assignment 2: Lexical Scoping (Week 3)
+##	Course:	R Programming by Johns Hopkins University
+##
+##  ******************************************************
+##	Overall, this assignment highlights the power and intricases of lexical scoping.
+##	This R code takes advantage of lexical scoping.
+##	The power of the code comes in because functions can return objects of type list(),
+##	and this list() of functions allows access to any other objects defined in the environment of the original function.
+##	Matrix inversion is usually a costly computation and there may be some benefit to caching the inverse of a matrix,
+##	rather than compute it repeatedly.
+##	These functions cache the inverse of a matrix.
+##	In the makeCacheMatrix() function, the subsequent code can access specific values,
+##	through the use of getters (program modules that retrieve data) and setters (program modules that sets data).
+##	The function cacheSolve() is then able to calculate or retrieve the inverse of the matrix.
+##	Retrieve if currently cached (hence saving computing time and power).
+##	Computing the inverse of a square matrix is done with the solve function in R.
+##	For this code, it is assumed that the matrix supplied is always invertible.
+##
+##  ******************************************************
+##
+##	makeCacheMatrix:
+##	This function creates a special matrix object that can cache its inverse.
+##	This function builds a set of functions and returns the functions within a list to the parent environment.
+##	Please note that the "<<" (double left arrow) indicates that the assignment should be made to the parent environment
 
 makeCacheMatrix <- function(x = matrix()) { 	##initialise x as matrix form
 
@@ -32,18 +37,20 @@ makeCacheMatrix <- function(x = matrix()) { 	##initialise x as matrix form
         setinv <- function(solve) m <<- solve	##defines the setter for the inverse m
         getinv <- function() m					##defines the getter for the inverse m
 		
-##The getters and setters are now defined for both of the data objects within the makeCacheMatrix() object.		
+##	The getters and setters are now defined for both of the data objects within the makeCacheMatrix() object.		
 		
         list(set = set,							##assigns each of these functions as an element within a list(),
 			 get = get,							##and returns it to the parent environment
-             setinv = setinv,					##each element in the list is created with a name,
-             getinv = getinv)					##this allows us to use the $ extract operator to access the functions by name
+             setinv = setinv,					##each element in the list is defined with a name,
+             getinv = getinv)					##this allows us to use the $ extract operator to access the functions by name	 
+
 }
 
-##cacheSolve:
-##This function computes the inverse of the special "matrix" returned by makeCacheMatrix above.
-##If the inverse has already been calculated (and the matrix has not changed),
-##then the cachesolve should retrieve the inverse from the cache.
+##	cacheSolve:
+##	This function computes the inverse of the matrix returned by makeCacheMatrix above.
+##	If the inverse has already been calculated (and the matrix has not changed),
+##	then the cachesolve should retrieve the inverse from the cache.
+##	Please note that the passing variable must be of the type makeCacheMatrix().
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
